@@ -14,29 +14,30 @@ import javax.persistence.OneToMany;
 import javax.validation.constraints.NotBlank;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.sun.istack.NotNull;
 
 @Entity
 public class Cargo {
 
-	private @Id @GeneratedValue(strategy = GenerationType.IDENTITY) Long id;
-	private String nome;
+	private @Id @GeneratedValue(strategy = GenerationType.IDENTITY) Long idCargo;
+	private @NotBlank String nome;
 	
-	@OneToMany(mappedBy = "listaDeCargos", cascade = CascadeType.REMOVE)
-	@JsonIgnoreProperties({"listaDeCargos"})
-	private List<Trabalhador> trabalhadoresCargo = new ArrayList<>();
-	
-	@NotBlank
+	@NotNull
 	@ManyToOne
 	@JoinColumn(name = "id_setor")
 	@JsonIgnoreProperties({"cargosRelacionados"})
 	private Setor setorRelacionado;
+	
+	@OneToMany(mappedBy = "listaDeCargos", cascade = CascadeType.REMOVE)
+	@JsonIgnoreProperties({"listaDeCargos"})
+	private List<Trabalhador> trabalhadoresCargo = new ArrayList<>();
 
 	public Long getId() {
-		return id;
+		return idCargo;
 	}
 
-	public void setId(Long id) {
-		this.id = id;
+	public void setId(Long idCargo) {
+		this.idCargo = idCargo;
 	}
 
 	public String getNome() {

@@ -2,11 +2,21 @@ plugins {
 	id 'org.springframework.boot' version '2.5.5'
 	id 'io.spring.dependency-management' version '1.0.11.RELEASE'
 	id 'java'
+	id 'org.asciidoctor.convert' version '1.5.3'
+	id 'org.hidetake.swagger.generator' version '1.4.0'
 }
 
 group = 'com.project'
 version = '0.0.1-SNAPSHOT'
 sourceCompatibility = '11'
+
+ext {
+
+	springFoxArtifacts = ["springfox-swagger2", "springfox-swagger-ui"]
+
+	springFoxVersion = "2.6.0"
+	swaggerCodeGenVersion = "2.2.1"
+}
 
 repositories {
 	mavenCentral()
@@ -19,12 +29,28 @@ dependencies {
 	developmentOnly 'org.springframework.boot:spring-boot-devtools'
 	runtimeOnly 'mysql:mysql-connector-java'
 	testImplementation 'org.springframework.boot:spring-boot-starter-test'
-	implementation("io.springfox:springfox-swagger2:2.9.2")
-	implementation("io.springfox:springfox-swagger-ui:3.0.0")
-	compile('org.springframework.boot:spring-boot-starter-web')
-   	testCompile('org.springframework.boot:spring-boot-starter-test')
-   	compile group: 'io.springfox', name: 'springfox-swagger2', version: '2.7.0'
-   	compile group: 'io.springfox', name: 'springfox-swagger-ui', version: '2.7.0'
+	compile("org.springframework.boot:spring-boot-starter-web")
+
+	springFoxArtifacts.each {artifact -> compile("io.springfox:$artifact:$springFoxVersion")}
+	swaggerCodegen("io.swagger:swagger-codegen-cli:$swaggerCodeGenVersion")}
+
+task copySwaggerGeneratedCode(type: Copy) {
+	
+	from "${buildDir}/swagger-code"
+	into "${projectDir}"
+}
+
+generateSwaggerCode {
+
+	configFile = file('src/main/resources/swagger/config.json')
+	components = ['models', 'apis']
+	inputFile = file('src/main/resources/swagger/petstore-api.json')
+	language = 'spring'
+}
+
+generateSwaggerCode.finalizedBy(project.tasks.copySwaggerGeneratedCode)
+
+generateSwaggerDoc {inputFile = file('src/main/resources/swagger/petstore-api.json')}
 }
 
 test {

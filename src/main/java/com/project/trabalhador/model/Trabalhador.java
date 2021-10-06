@@ -9,28 +9,30 @@ import javax.persistence.ManyToOne;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 
+import org.hibernate.validator.constraints.br.CPF;
+
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 @Entity
 public class Trabalhador {
 
-	private @Id @GeneratedValue(strategy = GenerationType.IDENTITY) Long id;
+	private @Id @GeneratedValue(strategy = GenerationType.IDENTITY) Long idTrabalhador;
 	private @NotBlank String nome;
 	private @NotNull Long cpf;
 	private String sexo;
 	
-	@NotBlank
+	@NotNull
 	@ManyToOne
 	@JoinColumn(name = "id_cargo")
 	@JsonIgnoreProperties({"trabalhadoresCargo"})
 	private Cargo listaDeCargos;
 
 	public Long getId() {
-		return id;
+		return idTrabalhador;
 	}
 
-	public void setId(Long id) {
-		this.id = id;
+	public void setId(Long idTrabalhador) {
+		this.idTrabalhador = idTrabalhador;
 	}
 
 	public String getNome() {

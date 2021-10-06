@@ -15,7 +15,7 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 @Entity
 public class Setor {
 
-	private @Id @GeneratedValue(strategy = GenerationType.IDENTITY) Long id;
+	private @Id @GeneratedValue(strategy = GenerationType.IDENTITY) Long idSetor;
 	private String nome;
 	
 	@OneToMany(mappedBy = "setorRelacionado", cascade = CascadeType.REMOVE)
@@ -23,11 +23,11 @@ public class Setor {
 	private List<Cargo> cargosRelacionados = new ArrayList<>();
 
 	public Long getId() {
-		return id;
+		return idSetor;
 	}
 
-	public void setId(Long id) {
-		this.id = id;
+	public void setId(Long idSetor) {
+		this.idSetor = idSetor;
 	}
 
 	public String getNome() {
